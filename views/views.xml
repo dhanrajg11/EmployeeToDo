@@ -1,0 +1,79 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_employee_todo_tree" model="ir.ui.view">
+        <field name="name">employee.todo.task.tree</field>
+        <field name="model">employee.todo.task</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="task_name"/>
+                <field name="priority"/>
+                <field name="deadline"/>
+                <field name="progress"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_employee_todo_form" model="ir.ui.view">
+        <field name="name">employee.todo.task.form</field>
+        <field name="model">employee.todo.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="task_name"/>
+                    <field name="priority"/>
+                    <field name="deadline"/>
+                    <field name="progress"/>
+                    <field name="employee_id"/>
+                </group>
+                <!-- Add Activity Field for tracking activities -->
+                <!-- field name="activity_ids" widget="mail_activity"/-->
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_employee_todo_kanban" model="ir.ui.view">
+        <field name="name">employee.todo.task.kanban</field>
+        <field name="model">employee.todo.task</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="task_name"/>
+                <field name="priority"/>
+                <field name="deadline"/>
+                <field name="progress"/>
+                <field name="employee_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click oe_kanban_card oe_kanban_color_#{record.priority.raw_value}">
+                            <div class="oe_kanban_content">
+                                <strong><t t-esc="record.task_name.value"/></strong>
+                                <div>
+                                    <t t-esc="record.employee_id.value"/>
+                                </div>
+                                <div>
+                                    <small><t t-esc="record.deadline.value"/></small>
+                                </div>
+                                <div>
+                                    <strong>Progress: </strong><t t-esc="record.progress.value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Define the action to use Kanban and Tree views -->
+    <record id="action_employee_todo_tasks" model="ir.actions.act_window">
+        <field name="name">To-Do Tasks</field>
+        <field name="res_model">employee.todo.task</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- Define the menu item -->
+    <menuitem id="menu_employee_todo_root" name="To-Do" sequence="10"/>
+    <menuitem id="menu_employee_todo_tasks" name="Tasks" parent="menu_employee_todo_root" action="action_employee_todo_tasks" sequence="10"/>
+</odoo>
